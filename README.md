@@ -60,14 +60,14 @@ A FastAPI-based backend service for managing and retrieving IoT device status da
 
 ## Running Tests
 ### Locally (without Docker)
-Run specific tests:
+1. Run specific tests:
     ``` bash
     pytest tests/test_validators.py
     pytest routers/test_status.py
     ```
 
 ### Using Docker
-Build and run tests inside the Docker container:
+1. Build and run tests inside the Docker container:
     ```bash
     docker build -t IOT-DEVICE-STATUS .
     docker run IOT-DEVICE-STATUS pytest
@@ -83,36 +83,34 @@ This project can be integrated into a CI/CD pipeline to automate:
 - Deploying to staging/production environments
 
 ### Using GitHub Actions
-We can add a .github/workflows/ci.yml workflow like:
-    ```bash
-name: CI
+1. We can add a .github/workflows/ci.yml workflow like:
+    ``` bash
+      name: CI
+      on:
+        push:
+          branches:
+            - main
+        pull_request:
+      jobs:
+        build-and-test:
+          runs-on: ubuntu-latest
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+          steps:
+            - uses: actions/checkout@v3
 
-jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.10'
 
-    steps:
-      - uses: actions/checkout@v3
+            - name: Install dependencies
+              run: pip install -r requirements.txt
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run tests
-        run: pytest unittests/test_validators.py routers/test_status.py
-
-      - name: Running the app
-        run: uvicorn main:app --host 0.0.0.0 --port 8000
+            - name: Run tests
+              run: pytest unittests/test_validators.py routers/test_status.py
+   
+            - name: Running the app
+              run: uvicorn main:app --host 0.0.0.0 --port 8000
 
       
     ```
