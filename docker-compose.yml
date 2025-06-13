@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: iot_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/iot-device-status-sensor  
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+  test:
+    build: .
+    container_name: iot_tests
+    volumes:
+      - .:/iot-device-status-sensor
+    command: pytest unittests/test_validators.py routers/test_status.py
