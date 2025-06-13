@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-WORKDIR /iot-device-status-sensor
+WORKDIR /IOT-DEVICE-STATUS
 
 COPY requirements.txt .
 
